@@ -1,5 +1,5 @@
 //
-// Created by Jason Grater on 06/10/2026.
+// Created by JGrater on 06/10/2026.
 //
 
 #ifndef RENDERER_H
@@ -10,33 +10,33 @@
 
 namespace Renderer {
 
-    static constexpr std::string RESET{"\033[0m"};
-    static constexpr std::string GREEN{"\033[42;30m"};
-    static constexpr std::string YELLOW{"\033[43;30m"};
-    static constexpr std::string GREY{"\033[100;37m"};
+    static constexpr std::string_view RESET{"\033[0m"};
+    static constexpr std::string_view GREEN{"\033[42;30m"};
+    static constexpr std::string_view YELLOW{"\033[43;30m"};
+    static constexpr std::string_view GREY{"\033[100;37m"};
 
     inline void renderWelcome() {
         std::cout << "Welcome to C++ Wordle.\nGuess the 5-letter word correctly to win!\n";
     }
 
-    inline std::string getColour(const LetterStatus &letterStatus) {
+    inline std::string_view getColour(const LetterStatus letterStatus) {
         switch (letterStatus) {
-            case correct:
+            case LetterStatus::Correct:
                 return GREEN;
-            case present:
+            case LetterStatus::Present:
                 return YELLOW;
             default:
                 return GREY;
         }
     }
 
-    inline void renderGuess(const guessHistory& guesses) {
-        for (int i{0}; i < guesses.guess.length(); i++) {
+    inline void renderGuess(const GuessHistory& guesses) {
+        for (std::size_t i{0}; i < guesses.guess.length(); i++) {
             std::cout << getColour(guesses.statuses[i]) << " " << guesses.guess[i] << " " << RESET;
         }
     }
 
-    inline void renderBoard(const std::vector<guessHistory>& guessHistory) {
+    inline void renderBoard(const std::vector<GuessHistory>& guessHistory) {
         for (auto const& guess : guessHistory) {
             renderGuess(guess);
             std::cout << std::endl;

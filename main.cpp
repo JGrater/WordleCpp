@@ -1,46 +1,8 @@
-#include <cassert>
-#include <iostream>
-#include <map>
-
 #include "Renderer.h"
 #include "Wordle.h"
 #include "WordRepository.h"
 
-std::vector<LetterStatus> evaluate(const std::string_view word, const std::string input) {
-    assert(word.size() == input.size());
-
-    std::vector letters(5,null);
-    std::map<char, int> remainingCount{};
-
-    for (int i{0}; i < word.length(); ++i) {
-        const char wordChar{word[i]};
-        const char guessChar{input[i]};
-        if (wordChar == guessChar) {
-            letters[i] = correct;
-        } else {
-            // Record the wordle char and count in a map, this is to account for duplication
-            remainingCount[wordChar]++;
-        }
-    }
-
-    for (int i{0}; i < word.length(); ++i) {
-        // if letter status already set, continue
-        if (letters[i] != null) continue;
-
-        char guessChar{input[i]};
-        // get count of remaining char, if not recorded default to 0
-        const int count{remainingCount[guessChar] ? remainingCount[guessChar] : 0};
-
-        if (count > 0) {
-            letters[i] = present;
-            // decrement count of recorded remaining char
-            remainingCount[guessChar]--;
-        } else {
-            letters[i] = absent;
-        }
-    }
-    return letters;
-}
+#include <iostream>
 
 bool verifyInput(const std::string_view input) {
     if (input.empty() || input.length() != 5) {
@@ -61,7 +23,7 @@ void gameLoop(const WordRepository& repo) {
     Wordle game{repo.getRandomWord()};
 
     do {
-        std::string input = ConsoleInput::string_input(std::format("\nEnter a 5-letter word ({} attempts left): ", game.getRemainingGuesses()));
+        std::string input = ConsoleInput::stringInput(std::format("\nEnter a 5-letter word ({} attempts left): ", game.getRemainingGuesses()));
         if (!verifyInput(input)) continue;
 
         input = Utils::toUpper(input);
@@ -75,7 +37,7 @@ void gameLoop(const WordRepository& repo) {
             continue;
         }
 
-        game.submitGuess(input, evaluate(game.getWord(), input));
+        game.submitGuess(input, game.evaluate(input));
 
         Renderer::renderBoard(game.getGuessHistory());
     } while (!game.isGameOver());

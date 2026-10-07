@@ -1,5 +1,5 @@
 //
-// Created by Jason Grater on 05/10/2026.
+// Created by JGrater on 05/10/2026.
 //
 
 #ifndef WORDREPOSITORY_H
@@ -10,13 +10,16 @@
 
 class WordRepository {
 public:
-    WordRepository() { loadWords("assets/words.txt"); }
+    explicit WordRepository(std::string filePath = "assets/words.txt")
+        : mFilePath{std::move(filePath)} {
+        loadWords(mFilePath);
+    }
 
-    std::vector<std::string> getWords() const { return mWords; }
     std::string_view getRandomWord() const { return mWords[Random::get<std::size_t>(0, mWords.size()-1)]; }
     bool isValidWord(std::string_view word) const;
 
 private:
+    std::string mFilePath;
     std::vector<std::string> mWords;
 
     void loadWords(const std::string &filepath);

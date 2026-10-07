@@ -34,7 +34,7 @@ namespace ConsoleInput {
         return input;
     }
 
-    inline std::string string_input(const std::string_view prompt) {
+    inline std::string stringInput(const std::string_view prompt) {
         std::string input{};
         std::cout << prompt;
         std::getline(std::cin >> std::ws, input);

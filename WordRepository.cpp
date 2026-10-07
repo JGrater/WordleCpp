@@ -1,5 +1,5 @@
 //
-// Created by Jason Grater on 05/10/2026.
+// Created by JGrater on 05/10/2026.
 //
 
 #include "WordRepository.h"
@@ -8,6 +8,7 @@
 #include <string_view>
 #include <algorithm>
 #include <ranges>
+#include <filesystem>
 
 void WordRepository::loadWords(const std::string& filepath) {
     if (!std::filesystem::exists(filepath)) throw std::runtime_error("File does not exist: " + filepath);
